@@ -1,5 +1,5 @@
 # UnityProject
-Unity gamedev course first project
+Unity gamedev course project
 
 
 the example how it shoud finally be is here
