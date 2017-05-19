@@ -6,12 +6,11 @@ the example how it shoud finally be is here
 
 hungry-rabbit.oop.in.ua
 
+#
+#
+#
 
-
-
-
-game sys info
-
+# game sys info (for developer)
 animator
 idle - 0
 run - 1
