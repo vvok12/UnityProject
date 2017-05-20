@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HeroFollow : MonoBehaviour {
 
-	public HeroRabitBehaviour hero;
+	public HeroRabbit hero;
 
 	// Update is called once per frame
 	void Update () {
