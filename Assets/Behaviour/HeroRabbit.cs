@@ -13,12 +13,14 @@ public class HeroRabbit : MonoBehaviour {
 	private Rigidbody2D myRB = null;
 	private SpriteRenderer mySR = null;
 	private Animator myA = null;
+	private BoxCollider2D myBC = null;
 	// Use this for initialization
 	void Start () {
 		//init variables
 		myRB = this.GetComponent<Rigidbody2D>();
 		mySR = this.GetComponent<SpriteRenderer> ();
 		myA = this.GetComponent<Animator> ();
+		myBC = this.GetComponent<BoxCollider2D> ();
 		//freeze rotation
 		myRB.freezeRotation = true;
 		//remember start position
@@ -29,9 +31,15 @@ public class HeroRabbit : MonoBehaviour {
 
 	//private int action=0;
 
+	//public float coefVectorUp =0.3f;
+	//public float coefVectorDown =0.1f;
+
 	private bool isGrounded (){
 		Vector3 from = transform.position + Vector3.up * 0.3f;
-		Vector3 to = transform.position + Vector3.down * 0.1f;
+		Vector3 to = transform.position + Vector3.up * 0.1f;
+
+		Debug.DrawLine (from, to);
+
 		int layer_id = 1 << LayerMask.NameToLayer ("Ground");
 		//Перевіряємо чи проходить лінія через Collider з шаром Ground
 		RaycastHit2D hit = Physics2D.Linecast(from, to, layer_id);
@@ -39,28 +47,32 @@ public class HeroRabbit : MonoBehaviour {
 			return true;
 		}
 		return false;
+
 	}
 
-	private void tryJump(){
+	private void jump(){
 
 		jumpTime+=Time.deltaTime;
-		if (jumpTime < jumpMaxTime) {
-			Vector2 vel = myRB.velocity;
-			vel.y = jumpSpeed * (1.0f - jumpTime / jumpMaxTime);
-			myRB.velocity = vel;
-		}
+		//if (jumpTime < jumpMaxTime) {
+		Vector2 vel = myRB.velocity;
+		vel.y = jumpSpeed * (1.0f - jumpTime / jumpMaxTime);
+		myRB.velocity = vel;
+		//}
 	}
+
 
 	void FixedUpdate () {
 		float runvalue = Input.GetAxis ("Horizontal");
 		int action = 0;
 		bool isGroundedVar = isGrounded ();
-		if (Input.GetButton ("Jump")) {
-			if (isGroundedVar) {
-				jumpTime = 0.0f;
-			}
-			tryJump ();
 
+		if (Input.GetButton ("Jump")) {
+			if (isGroundedVar)
+				jumpTime = 0.0f;
+			if (jumpTime<jumpMaxTime)
+				jump ();
+		} else {
+			jumpTime += jumpMaxTime;
 		}
 		if (!isGroundedVar)
 			action = 2;
