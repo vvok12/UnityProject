@@ -61,8 +61,15 @@ public class HeroRabbit : MonoBehaviour {
 
 
 	void FixedUpdate () {
+		
 		float runvalue = Input.GetAxis ("Horizontal");
 		int action = 0;
+
+		if (isDead) {
+			myA.SetInteger ("action", 4);
+			return;
+		}
+
 		bool isOnMoveingPlatformVar = isOnMovingPlatform();
 		bool isGroundedVar = isGrounded ();
 		//or
@@ -99,5 +106,19 @@ public class HeroRabbit : MonoBehaviour {
 		} else if(runvalue > 0) {
 			mySR.flipX = false;
 		}
+	}
+
+	bool isBigv =false;
+	public bool isBig(){
+		return isBigv;
+	}
+	public bool isDead =false;
+	public void resizeMakeBig(){
+		transform.localScale *= 2;
+		isBigv = true;
+	}
+	public void resizeMakeSmall(){
+		transform.localScale /= 2;
+		isBigv = false;
 	}
 }

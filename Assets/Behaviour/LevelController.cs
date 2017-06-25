@@ -5,17 +5,34 @@ using UnityEngine;
 public class LevelController : MonoBehaviour {
 	public static LevelController current;
 
+	public int coins = 0;
+	public float deathWaitTime = 3.0f;
 	private Vector3 startPos;
-
 
 	void Awake() {
 		current = this;
 	}
 
-	public void OnRabbitDeath(HeroRabbit rb){
+	public void OnRabbitDeath(HeroRabbit rb)
+	{
+		OnRabbitDeath (rb, true);
+	}
+
+	public void OnRabbitDeath(HeroRabbit rb, bool instantly){
+		if (instantly) {
+			Transform rbt = rb.transform;
+			rbt.position = this.startPos;
+		} else
+			StartCoroutine (DeathAnimation(rb));
+	}
+
+	IEnumerator DeathAnimation(HeroRabbit rb){
+		//rb.GetComponents<Animator> () [0].speed = deadBodyWait;
+		rb.isDead = true;
+		yield return new WaitForSeconds (deathWaitTime);
+		rb.isDead = false;
 		Transform rbt = rb.transform;
 		rbt.position = this.startPos;
-
 	}
 
 	public void SetStartPosition (Vector3 sp){
@@ -24,8 +41,8 @@ public class LevelController : MonoBehaviour {
 	}
 
 	public static bool isOn(MonoBehaviour someone, string layer){
-		Vector3 from = someone.transform.position + Vector3.up * 0.3f;
-		Vector3 to = someone.transform.position + Vector3.up * 0.1f;
+		Vector3 from = someone.transform.position + Vector3.up * 0.5f;
+		Vector3 to = someone.transform.position + Vector3.up * 0.0f;
 
 		Debug.DrawLine (from, to);
 
