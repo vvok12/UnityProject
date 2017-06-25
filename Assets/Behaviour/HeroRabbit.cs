@@ -14,6 +14,7 @@ public class HeroRabbit : MonoBehaviour {
 	private SpriteRenderer mySR = null;
 	private Animator myA = null;
 	private BoxCollider2D myBC = null;
+	private Transform savedParent;
 	// Use this for initialization
 	void Start () {
 		//init variables
@@ -21,35 +22,33 @@ public class HeroRabbit : MonoBehaviour {
 		mySR = this.GetComponent<SpriteRenderer> ();
 		myA = this.GetComponent<Animator> ();
 		myBC = this.GetComponent<BoxCollider2D> ();
+		savedParent = transform.parent;
 		//freeze rotation
 		myRB.freezeRotation = true;
 		//remember start position
 		Vector3 myVec = this.transform.position;
 		LevelController.current.SetStartPosition (myVec);
 	}
-
-
+		
 	//private int action=0;
 
 	//public float coefVectorUp =0.3f;
 	//public float coefVectorDown =0.1f;
 
+
+
 	private bool isGrounded (){
-		Vector3 from = transform.position + Vector3.up * 0.3f;
-		Vector3 to = transform.position + Vector3.up * 0.1f;
-
-		Debug.DrawLine (from, to);
-
-		int layer_id = 1 << LayerMask.NameToLayer ("Ground");
-		//Перевіряємо чи проходить лінія через Collider з шаром Ground
-		RaycastHit2D hit = Physics2D.Linecast(from, to, layer_id);
-		if(hit) {
-			return true;
-		}
-		return false;
-
+		return LevelController.isOn (this, "Ground");
 	}
 
+	private RaycastHit2D tempMovingPlatformHit;
+	private bool isOnMovingPlatform(){
+		tempMovingPlatformHit = LevelController.getPlatform(this, "MovingPlatform");
+		if (tempMovingPlatformHit)
+			return true;
+		else
+			return false;
+	}
 	private void jump(){
 
 		jumpTime+=Time.deltaTime;
@@ -64,8 +63,15 @@ public class HeroRabbit : MonoBehaviour {
 	void FixedUpdate () {
 		float runvalue = Input.GetAxis ("Horizontal");
 		int action = 0;
+		bool isOnMoveingPlatformVar = isOnMovingPlatform();
 		bool isGroundedVar = isGrounded ();
-
+		//or
+		if (isOnMoveingPlatformVar) {
+			isGroundedVar = true;
+			LevelController.SetParent (transform, tempMovingPlatformHit.transform);
+		} else {
+			LevelController.SetParent (transform, savedParent);
+		}
 		if (Input.GetButton ("Jump")) {
 			if (isGroundedVar)
 				jumpTime = 0.0f;
