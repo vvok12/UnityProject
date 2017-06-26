@@ -26,11 +26,24 @@ public class LevelController : MonoBehaviour {
 	}
 
 	public void OnRabbitDeath(HeroRabbit rb, bool instantly){
+		if (!rb.isDead)
+			health -= 1;
 		if (instantly) {
 			Transform rbt = rb.transform;
 			rbt.position = this.startPos;
-		} else
+		} else {
+			if (rb.isBig()) {
+				rb.resizeMakeSmall ();
+				health += 1;
+				return;
+			}
 			StartCoroutine (DeathAnimation(rb));
+		}
+		if (health <= 0) {
+			LevelLoader ll = new LevelLoader ();
+			ll.SceneName = "LevelChoose";
+			ll.load ();
+		}
 	}
 
 	IEnumerator DeathAnimation(HeroRabbit rb){
