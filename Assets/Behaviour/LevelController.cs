@@ -6,6 +6,13 @@ public class LevelController : MonoBehaviour {
 	public static LevelController current;
 
 	public int coins = 0;
+	public int health = 3;
+	public int fruits = 0;
+	public int fruitsAtAll = 0;
+	public bool crystal1 = false, crystal2 = false, crystal3 = false;
+
+
+
 	public float deathWaitTime = 3.0f;
 	private Vector3 startPos;
 
@@ -75,5 +82,12 @@ public class LevelController : MonoBehaviour {
 	public static Vector3 zProjection(Vector3 input, float z){
 		input.z = z;
 		return input;
+	}
+	public static GameObject getChildGameObject(GameObject parent, string childName){
+		Transform[] ts = parent.GetComponentsInChildren<Transform>();
+		foreach (Transform t in ts)
+			if (t.name == childName)
+				return t.gameObject;
+		return null;
 	}
 }
