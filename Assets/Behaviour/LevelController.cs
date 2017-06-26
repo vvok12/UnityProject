@@ -72,5 +72,8 @@ public class LevelController : MonoBehaviour {
 			obj.position = pos;
 		}
 	}
-
+	public static Vector3 zProjection(Vector3 input, float z){
+		input.z = z;
+		return input;
+	}
 }

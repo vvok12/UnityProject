@@ -8,6 +8,8 @@ public class HeroRabbit : MonoBehaviour {
 	public float jumpSpeed = 2;
 	public float jumpMaxTime = 2;
 
+	public static HeroRabbit lastRabbit ;
+
 	private float jumpTime = 0;
 
 	private Rigidbody2D myRB = null;
@@ -28,8 +30,12 @@ public class HeroRabbit : MonoBehaviour {
 		//remember start position
 		Vector3 myVec = this.transform.position;
 		LevelController.current.SetStartPosition (myVec);
+
 	}
 		
+	void Awake(){
+		lastRabbit = this;
+	}
 	//private int action=0;
 
 	//public float coefVectorUp =0.3f;
