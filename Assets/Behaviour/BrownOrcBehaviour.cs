@@ -65,6 +65,7 @@ public class BrownOrcBehaviour : MonoBehaviour {
 			mySR.flipX = false;
 		else
 			mySR.flipX = true;
+		reloadTime = carrotDeltaTime;
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
